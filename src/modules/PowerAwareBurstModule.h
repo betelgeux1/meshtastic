@@ -1,6 +1,6 @@
 #pragma once
 #include "mesh/MeshService.h"
-#include "modules/ProtobufModule.h"
+#include "mesh/ProtobufModule.h"
 #include "mesh/generated/meshtastic/mesh.pb.h"  // meshtastic_Position
 
 class PowerAwareBurstModule : public ProtobufModule<meshtastic_Position> {
