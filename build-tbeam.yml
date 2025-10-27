@@ -1,0 +1,36 @@
+name: Build T-Beam (v2.6.10+burst)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "**" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (your repo with the patch already merged into firmware tree)
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+
+      - name: Build tbeam
+        run: |
+          # Ensure PlatformIO can find env; build specific env for T-Beam
+          pio run -e tbeam
+          mkdir -p dist
+          cp .pio/build/tbeam/firmware.bin dist/firmware-tbeam-2.6.10.9ce4455+burst.bin
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-tbeam-2.6.10.9ce4455+burst
+          path: dist/firmware-tbeam-2.6.10.9ce4455+burst.bin
