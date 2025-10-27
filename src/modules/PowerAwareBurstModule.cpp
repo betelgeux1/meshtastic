@@ -1,7 +1,7 @@
 #include "PowerAwareBurstModule.h"
 #include "mesh/NodeDB.h"
 #include "modules/AdminModule.h"
-#include "OSTimer.h"
+#include <Arduino.h>
 #include <cstdlib>
 #include "PowerStatus.h"
 extern PowerStatus powerStatus;
@@ -23,7 +23,7 @@ void PowerAwareBurstModule::setup() {
 void PowerAwareBurstModule::loop() {
   bool hasUsb=false, isCharging=false;
   pollPower(hasUsb, isCharging);
-  uint32_t now = os_getTime();
+  uint32_t now = millis() / 1000; //seconds since boot
 
   // Debounce transitions
   if (hasUsb) {
