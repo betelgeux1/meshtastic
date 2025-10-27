@@ -1,8 +1,16 @@
 #include "PowerAwareBurstModule.h"
 #include "mesh/NodeDB.h"
 #include "modules/AdminModule.h"
-#include "os/Timer.h"
+#include "OSTimer.h"
 #include <cstdlib>
+#include "PowerStatus.h"
+extern PowerStatus powerStatus;
+
+void PowerAwareBurstModule::pollPower(bool& hasUsb, bool& isCharging) {
+  hasUsb     = powerStatus.getHasUSB();
+  isCharging = powerStatus.getIsCharging(); // If this symbol is missing in 2.6.10 for your board, tell me and I’ll give the alternative.
+}
+``
 
 PowerAwareBurstModule::PowerAwareBurstModule()
   : ProtobufModule<meshtastic_Position>(PortNum_PositionApp, "PowerAwareBurst")
