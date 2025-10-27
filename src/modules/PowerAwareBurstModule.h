@@ -1,14 +1,22 @@
 #pragma once
 #include "mesh/MeshService.h"
 #include "mesh/ProtobufModule.h"
-// C-style nanopb headers for admin/config/portnums if needed later
 #include "mesh/generated/meshtastic/mesh.pb.h"
+
+// A small module that reacts to power changes and
+// (a) temporarily accelerates position cadence to send 5 positions,
+// (b) then applies low-power profile, and
+// (c) restores normal profile when USB power returns.
+//
+// Notes for Meshtastic v2.6.10:
+// - Protobufs are nanopb C-style structs (no set_* methods).  [1](https://deepwiki.com/meshtastic/firmware/2.1-hardware-detection-and-configuration)
+// - ProtobufModule is in mesh/ProtobufModule.h.              [1](https://deepwiki.com/meshtastic/firmware/2.1-hardware-detection-and-configuration)
 
 class PowerAwareBurstModule : public ProtobufModule<meshtastic_Position> {
 public:
   PowerAwareBurstModule();
   void setup();
-  void loop();   // remove 'override' to avoid mismatch on some minor versions
+  void loop();   // avoid 'override' to be compatible across minor versions
 
 private:
   // State
