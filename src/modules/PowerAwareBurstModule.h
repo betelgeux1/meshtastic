@@ -1,18 +1,19 @@
 #pragma once
 #include "mesh/MeshService.h"
 #include "mesh/ProtobufModule.h"
-#include "mesh/generated/meshtastic/mesh.pb.h"  // meshtastic_Position
+// C-style nanopb headers for admin/config/portnums if needed later
+#include "mesh/generated/meshtastic/mesh.pb.h"
 
 class PowerAwareBurstModule : public ProtobufModule<meshtastic_Position> {
 public:
   PowerAwareBurstModule();
-  void setup() override;
-  void loop() override;
+  void setup();
+  void loop();   // remove 'override' to avoid mismatch on some minor versions
 
 private:
   // State
-  bool lastUsb = false;
-  bool lastCharging = false;
+  bool     lastUsb = false;
+  bool     lastCharging = false;
   uint32_t nextBurstSendAt = 0;
   uint8_t  remainingBurstSends = 0;
   uint32_t rearmNotBefore = 0;
@@ -35,8 +36,7 @@ private:
 
   // Helpers
   void pollPower(bool& hasUsb, bool& isCharging);
-  bool buildPosition(meshtastic_Position& pos);
-  void sendPositionNow();
+  void scheduleNextBurst(uint32_t now);
   void applyLowPowerProfile();
   void applyNormalProfile();
 };
